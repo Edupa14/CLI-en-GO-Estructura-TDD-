@@ -5,6 +5,6 @@ import (
 	"time"
 )
 
-type %NOMBREMANTENEDOR%Enity struct {
+type %NOMBREMANTENEDOR%Entity struct {
 	%VARIABLESENTIDAD%
 }

@@ -2,17 +2,17 @@ package controller
 
 import (
 	"gitlab.com/ns-desarrollo-web/erp/ns-core-service"
-	"%RUTAMANTENEDOR%/domain/dto"
-	"%RUTAMANTENEDOR%/domain/usecase"
-	"%NOMBRERUTASERVICIO%/api/utils"
+	"ns-compras-service/api/mantenedores/ejemplo-de-texto/domain/dto"
+	"ns-compras-service/api/mantenedores/ejemplo-de-texto/domain/usecase"
+	"ns-compras-service/api/utils"
 	"strconv"
 )
 
-type %NOMBREMANTENEDOR%Controller struct {
-	useCase usecase.%NOMBREMANTENEDOR%UseCase
+type EjemploDeTextoController struct {
+	useCase usecase.EjemploDeTextoUseCase
 }
 
-func (p *%NOMBREMANTENEDOR%Controller) Listar(client *ns.Client) {
+func (p *EjemploDeTextoController) Listar(client *ns.Client) {
 	pag := client.GetPagination()
 
 	rs, err := p.useCase.Listar(client.GetContext(), pag.Start, pag.Length, pag.Search, pag.Order)
@@ -24,7 +24,7 @@ func (p *%NOMBREMANTENEDOR%Controller) Listar(client *ns.Client) {
 	client.Ok(rs)
 }
 
-func (p *%NOMBREMANTENEDOR%Controller) Buscar(client *ns.Client) {
+func (p *EjemploDeTextoController) Buscar(client *ns.Client) {
 	search := client.Query("search")
 	var advancedSearch string
 
@@ -57,7 +57,7 @@ func (p *%NOMBREMANTENEDOR%Controller) Buscar(client *ns.Client) {
 	client.Ok(rs)
 }
 
-func (p *%NOMBREMANTENEDOR%Controller) BuscarPorId(client *ns.Client) {
+func (p *EjemploDeTextoController) BuscarPorId(client *ns.Client) {
 	id, err := strconv.ParseInt(client.Param("id"), 10, 64)
 	if err != nil {
 		client.Fail(err)
@@ -73,8 +73,8 @@ func (p *%NOMBREMANTENEDOR%Controller) BuscarPorId(client *ns.Client) {
 	client.Ok(rs)
 }
 
-func (p *%NOMBREMANTENEDOR%Controller) Crear(client *ns.Client) {
-	var req dto.%NOMBREMANTENEDOR%Request
+func (p *EjemploDeTextoController) Crear(client *ns.Client) {
+	var req dto.EjemploDeTextoRequest
 	err := client.UnmarshalDTO(&req)
 	if err != nil {
 		client.Fail(err)
@@ -90,8 +90,8 @@ func (p *%NOMBREMANTENEDOR%Controller) Crear(client *ns.Client) {
 	client.Ok(rs)
 }
 
-func (p *%NOMBREMANTENEDOR%Controller) Actualizar(client *ns.Client) {
-	var req dto.%NOMBREMANTENEDOR%Request
+func (p *EjemploDeTextoController) Actualizar(client *ns.Client) {
+	var req dto.EjemploDeTextoRequest
 	err := client.UnmarshalDTO(&req)
 	if err != nil {
 		client.Fail(err)
@@ -113,7 +113,7 @@ func (p *%NOMBREMANTENEDOR%Controller) Actualizar(client *ns.Client) {
 	client.Ok(rs)
 }
 
-func (p *%NOMBREMANTENEDOR%Controller) Eliminar(client *ns.Client) {
+func (p *EjemploDeTextoController) Eliminar(client *ns.Client) {
 	id, err := strconv.ParseInt(client.Param("id"), 10, 64)
 	if err != nil {
 		client.Fail(err)
@@ -129,7 +129,7 @@ func (p *%NOMBREMANTENEDOR%Controller) Eliminar(client *ns.Client) {
 	client.Ok()
 }
 
-func (p *%NOMBREMANTENEDOR%Controller) Habilitar(client *ns.Client) {
+func (p *EjemploDeTextoController) Habilitar(client *ns.Client) {
 	id, err := strconv.ParseInt(client.Param("id"), 10, 64)
 	if err != nil {
 		client.Fail(err)
@@ -145,7 +145,7 @@ func (p *%NOMBREMANTENEDOR%Controller) Habilitar(client *ns.Client) {
 	client.Ok()
 }
 
-func (p *%NOMBREMANTENEDOR%Controller) Deshabilitar(client *ns.Client) {
+func (p *EjemploDeTextoController) Deshabilitar(client *ns.Client) {
 	id, err := strconv.ParseInt(client.Param("id"), 10, 64)
 	if err != nil {
 		client.Fail(err)
@@ -161,6 +161,6 @@ func (p *%NOMBREMANTENEDOR%Controller) Deshabilitar(client *ns.Client) {
 	client.Ok()
 }
 
-func New%NOMBREMANTENEDOR%Controller(useCase usecase.%NOMBREMANTENEDOR%UseCase) *%NOMBREMANTENEDOR%Controller {
-	return &%NOMBREMANTENEDOR%Controller{useCase: useCase}
+func NewEjemploDeTextoController(useCase usecase.EjemploDeTextoUseCase) *EjemploDeTextoController {
+	return &EjemploDeTextoController{useCase: useCase}
 }

@@ -15,10 +15,17 @@ func (s *Service) CreateMapDefault(fileName string, json json.Json) map[string]s
 	MapForReplace := make(map[string]string)
 	MapForReplace["%NOMBREMANTENEDOR%"] = utils.ConvertNameTitle(fileName)
 	MapForReplace["%NOMBREPAQUETEMANTENEDOR%"] = utils.ConvertNameAttr(fileName)
+	MapForReplace["%NOMBRERUTA%"] = utils.ConvertirNombreARuta(fileName)
+	MapForReplace["%NOMBRERUTASERVICIO%"] = "ns-" + utils.ConvertirNombreARuta(json.Servicio) + "-service"
 	MapForReplace["%RUTAMANTENEDOR%"] = "ns-" + utils.ConvertirNombreARuta(json.Servicio) + "-service/api/" + utils.ConvertirNombreARuta(json.Tipo) + "/" + utils.ConvertirNombreARuta(fileName)
 	MapForReplace["%VARIABLESJSON%"] = utils.JsonAAtributos(json)
 	MapForReplace["%VARIABLESENTIDAD%"] = utils.JsonAEntidad(json)
 	MapForReplace["%VARIABLESVO%"] = utils.ModeloAVO(json)
+	MapForReplace["%VARIABLESMODELO%"] = utils.DTOAModelo(json)
+	MapForReplace["%VARIABLESPAGINACION%"] = utils.ModeloAPaginacion(json)
+	MapForReplace["%NOMBRETABLA%"] = utils.ConvertTableTitle(json)
+	MapForReplace["%VARIABLESCOLUMNAS%"] = utils.JsonAColumnas(json)
+	MapForReplace["%FILTROAVANZADO%"] = utils.FiltroAvanzado(json)
 	return MapForReplace
 }
 

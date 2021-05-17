@@ -1,0 +1,35 @@
+{
+  "nom_mantenedor": "Ejemplo de texto",
+  "atributos": [
+    {
+      "nombre": "id",
+      "tipo": "int"
+    },
+    {
+      "nombre": "nombre",
+      "tipo": "string",
+      "cant_caracteres": 250
+    },
+    {
+      "nombre": "codigo",
+      "tipo": "string",
+      "cant_caracteres": 15
+    },
+    {
+      "nombre": "habilitado",
+      "tipo": "bool"
+    },
+    {
+      "nombre": "fecha_guardado",
+      "tipo": "datetime",
+      "metodo": "getutcdate()"
+    },
+    {
+      "nombre": "transaction_uid",
+      "tipo": "uniqueidentifier",
+      "metodo": "newid()"
+    }
+  ],
+  "tipo": "movimientos",
+  "servicio": "compartido"
+}

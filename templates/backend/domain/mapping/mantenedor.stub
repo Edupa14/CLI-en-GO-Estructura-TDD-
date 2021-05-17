@@ -7,32 +7,16 @@ import (
 	"%RUTAMANTENEDOR%/domain/valueobject"
 )
 
-func MapEmpaquePaginación(mod []model.EmpaqueModel, total int64, filtered int64) *valueobject.EmpaquePaginacion {
-	var res []valueobject.EmpaqueResponse
+func Map%NOMBREMANTENEDOR%Paginación(Modelo []model.%NOMBREMANTENEDOR%Model, total int64, filtered int64) *valueobject.%NOMBREMANTENEDOR%Paginacion {
+	var res []valueobject.%NOMBREMANTENEDOR%Response
 
-	for i := range mod {
-		res = append(res, valueobject.EmpaqueResponse{
-			Id:               	mod[i].Id,
-			Codigo:           	mod[i].Codigo,
-			Nombre:      		mod[i].Nombre,
-			NombreCorto:      	mod[i].NombreCorto,
-			IdTipo:         	mod[i].IdTipo,
-			ImpresionAuto:      mod[i].ImpresionAuto,
-			TaraEmpaque:        mod[i].TaraEmpaque,
-			CapaEmpaque:      	mod[i].CapaEmpaque,
-			CapaExpo:        	mod[i].CapaExpo,
-			IdCliente: 			mod[i].IdCliente,
-			UsoAvicola:         mod[i].UsoAvicola,
-			TotalUnid:         	mod[i].TotalUnid,
-			EsParticionable:    mod[i].EsParticionable,
-			PesoMinimo:   		mod[i].PesoMinimo,
-			PesoMaximo:      	mod[i].PesoMaximo,
-			Habilitado:       	mod[i].Habilitado,
-			TransactionUID:   	mod[i].TransactionUID.String(),
+	for i := range Modelo {
+		res = append(res, valueobject.%NOMBREMANTENEDOR%Response{
+			%VARIABLESPAGINACION%
 		})
 	}
 
-	return &valueobject.EmpaquePaginacion{
+	return &valueobject.%NOMBREMANTENEDOR%Paginacion{
 		Data: res,
 		Meta: valueobject.MetaPaginacion{
 			RecordsFiltered: filtered,
@@ -41,7 +25,7 @@ func MapEmpaquePaginación(mod []model.EmpaqueModel, total int64, filtered int64
 	}
 }
 
-func MapEmpaqueSuggest(mod []model.EmpaqueModel) (res []*valueobject.EmpaqueSuggest) {
+func Map%NOMBREMANTENEDOR%Suggest(mod []model.%NOMBREMANTENEDOR%Model) (res []*valueobject.%NOMBREMANTENEDOR%Suggest) {
 	for i := range mod {
 
 		var allData interface{}
@@ -52,7 +36,7 @@ func MapEmpaqueSuggest(mod []model.EmpaqueModel) (res []*valueobject.EmpaqueSugg
 			allData = mod[i].Cols
 		}
 
-		res = append(res, &valueobject.EmpaqueSuggest{
+		res = append(res, &valueobject.%NOMBREMANTENEDOR%Suggest{
 			Id:          mod[i].Id,
 			Code:        &mod[i].Codigo,
 			Label:       &mod[i].Nombre,
@@ -69,45 +53,14 @@ func Map%NOMBREMANTENEDOR%ModelToVO(Modelo *model.%NOMBREMANTENEDOR%Model) *valu
 
 
 	return &valueobject.%NOMBREMANTENEDOR%Response{
-		Id:               	EmpaqueModel.Id,
-		Codigo:           	EmpaqueModel.Codigo,
-		Nombre:      		EmpaqueModel.Nombre,
-		NombreCorto:      	EmpaqueModel.NombreCorto,
-		IdTipo:         	EmpaqueModel.IdTipo,
-		ImpresionAuto:      EmpaqueModel.ImpresionAuto,
-		TaraEmpaque:        EmpaqueModel.TaraEmpaque,
-		CapaEmpaque:      	EmpaqueModel.CapaEmpaque,
-		CapaExpo:        	EmpaqueModel.CapaExpo,
-		IdCliente: 			EmpaqueModel.IdCliente,
-		UsoAvicola:         EmpaqueModel.UsoAvicola,
-		TotalUnid:         	EmpaqueModel.TotalUnid,
-		EsParticionable:    EmpaqueModel.EsParticionable,
-		PesoMinimo:   		EmpaqueModel.PesoMinimo,
-		PesoMaximo:      	EmpaqueModel.PesoMaximo,
-		Habilitado:       	EmpaqueModel.Habilitado,
-		TransactionUID:   	EmpaqueModel.TransactionUID.String(),
+		%VARIABLESVO%
 	}
 }
 
-func MapEmpaqueDTOTOModel(request *dto.EmpaqueRequest) *model.EmpaqueModel {
-	return &model.EmpaqueModel{
-		EmpaqueEnity: entity.EmpaqueEnity{
-			Id:               	request.Id,
-			Codigo:           	request.Codigo,
-			Nombre:      		request.Nombre,
-			NombreCorto:      	request.NombreCorto,
-			IdTipo:         	request.IdTipo,
-			ImpresionAuto:      request.ImpresionAuto,
-			TaraEmpaque:        request.TaraEmpaque,
-			CapaEmpaque:      	request.CapaEmpaque,
-			CapaExpo:        	request.CapaExpo,
-			IdCliente: 			request.IdCliente,
-			UsoAvicola:         request.UsoAvicola,
-			TotalUnid:         	request.TotalUnid,
-			EsParticionable:    request.EsParticionable,
-			PesoMinimo:   		request.PesoMinimo,
-			PesoMaximo:      	request.PesoMaximo,
-			Habilitado:       	request.Habilitado,
+func Map%NOMBREMANTENEDOR%DTOTOModel(Request *dto.%NOMBREMANTENEDOR%Request) *model.%NOMBREMANTENEDOR%Model {
+	return &model.%NOMBREMANTENEDOR%Model{
+		%NOMBREMANTENEDOR%Entity: entity.%NOMBREMANTENEDOR%Entity{
+			%VARIABLESMODELO%
 		},
 	}
 }

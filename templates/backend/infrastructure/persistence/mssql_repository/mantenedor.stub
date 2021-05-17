@@ -5,24 +5,25 @@ import (
 	db "gitlab.com/ns-desarrollo-web/erp/ns-core-service/services/databases"
 	"%RUTAMANTENEDOR%/domain/model"
 	"%RUTAMANTENEDOR%/domain/repository"
+	"%NOMBRERUTASERVICIO%/api/utils"
 )
 
-type empaqueMssqlRepository struct {
+type %NOMBREMANTENEDOR%MssqlRepository struct {
 	db db.Sql
 }
 
-func (p *empaqueMssqlRepository) Listar(client *ns.Context, start int, length int, search string, order string) (entidad []model.EmpaqueModel, total int64, filtered int64, err error) {
+func (p *%NOMBREMANTENEDOR%MssqlRepository) Listar(client *ns.Context, start int, length int, search string, order string) (entidad []model.%NOMBREMANTENEDOR%Model, total int64, filtered int64, err error) {
 	rs, err := p.db.Run(client, `
 		EXEC [NS_MAINTAINER_LIST]
 				@idempresa = '',
-				@columns = 'id,codigo,nombre,nombre_corto,id_tipo,impresion_auto,habilitado,fechacreacion,transaction_uid,id_cliente',
-				@table = 'TMEMPAQUE',
+				@columns = '%VARIABLESCOLUMNAS%',
+				@table = '%NOMBRETABLA%',
 				@start = $1,
 				@length = $2,
 				@search = $3,
 				@order = '',
 				@advanced_filter = '',
-				@default_filter = 'codigo, nombre'
+				@default_filter = '%FILTROAVANZADO%'
 	`, start, length, search)
 	if err != nil {
 		return
@@ -38,135 +39,61 @@ func (p *empaqueMssqlRepository) Listar(client *ns.Context, start int, length in
 	return
 }
 
-func (e *empaqueMssqlRepository) Crear(ctx *ns.Context, modelo *model.EmpaqueModel) (id int64, err error) {
-	values := []interface{}{
-		modelo.Codigo,
-		modelo.Nombre,
-		modelo.NombreCorto,
-		modelo.IdTipo,
-		modelo.ImpresionAuto,
-		modelo.TaraEmpaque,
-		modelo.CapaEmpaque,
-		modelo.CapaExpo,
-		modelo.UsoAvicola,
-		modelo.TotalUnid,
-		modelo.EsParticionable,
-		modelo.PesoMinimo,
-		modelo.PesoMaximo,
-		modelo.IdCliente,
-	}
+func (p *%NOMBREMANTENEDOR%MssqlRepository) Crear(ctx *ns.Context, modelo *model.%NOMBREMANTENEDOR%Model) (id int64, err error) {
+	json, err := db.Marshal(modelo)
 
-	lastInsertId, err := e.db.QueryWithLastID(ctx, `
-	   INSERT INTO TMEMPAQUE(
-			[codigo],
-		 	[nombre],
-			[nombre_corto],
-			[id_tipo],
-			[impresion_auto],
-		 	[tara_empaque],
-			[capa_empaque],
-			[capa_expo],
-		 	[uso_avicola],
-			[total_unid],
-			[es_particionable],
-		 	[peso_minimo],
-			[peso_maximo],
-			[id_cliente]
-   		)`, values...)
+	id, err = p.db.QueryWithLastID(ctx, "EXEC NS_%NOMBRETABLA%_I  @JSON = $1;", string(json))
 
-	return lastInsertId, err
+	return
 }
 
-func (e *empaqueMssqlRepository) Actualizar(ctx *ns.Context, id int64, modelo *model.EmpaqueModel) (err error) {
-	pst, err := e.db.Prepare(ctx, "UPDATE TMEMPAQUE SET codigo = $1, nombre = $2, nombre_corto = $3,"+
-		"id_tipo = $4, impresion_auto = $5, tara_empaque = $6, capa_empaque = $7, capa_expo = $8, uso_avicola = $9, " +
-		"total_unid = $10, es_particionable = $11, peso_minimo = $12, peso_maximo = $13, id_cliente = $14 where id = $15")
-	if err != nil {
-		return
-	}
+func (p *%NOMBREMANTENEDOR%MssqlRepository) Actualizar(ctx *ns.Context, id int64, modelo *model.%NOMBREMANTENEDOR%Model) (err error) {
+	json, err := db.Marshal(modelo)
 
-	defer pst.Close()
-	_, err = pst.Exec(
-			modelo.Codigo,
-			modelo.Nombre,
-			modelo.NombreCorto,
-			modelo.IdTipo,
-			modelo.ImpresionAuto,
-			modelo.TaraEmpaque,
-			modelo.CapaEmpaque,
-			modelo.CapaExpo,
-			modelo.UsoAvicola,
-			modelo.TotalUnid,
-			modelo.EsParticionable,
-			modelo.PesoMinimo,
-			modelo.PesoMaximo,
-			modelo.IdCliente,
-			id)
+	_, err = p.db.Query(ctx, "EXEC NS_%NOMBRETABLA%_U @ID = $1, @JSON = $2;", id, string(json))
 
-	if err != nil {
-		return
-	}
-	return nil
+	return
 }
 
-func (e *empaqueMssqlRepository) Eliminar(ctx *ns.Context, id int64) (err error) {
-	pst, err := e.db.Prepare(ctx, "delete TMEMPAQUE where id = $1")
-	if err != nil {
-		return
-	}
-	defer pst.Close()
-	_, err = pst.Exec(id)
-	if err != nil {
-		return
-	}
-	return nil
+func (p *%NOMBREMANTENEDOR%MssqlRepository) Eliminar(ctx *ns.Context, id int64) (err error) {
+	_, err = p.db.Exec(ctx, `EXEC NS_%NOMBRETABLA%_D @id = $1`, id)
+
+	return
 }
 
-func (e *empaqueMssqlRepository) BuscarPorId(ctx *ns.Context, id int64) (*model.EmpaqueModel, error) {
-	var a model.EmpaqueModel
-	err := e.db.Get(ctx, &a, "SELECT * FROM TMEMPAQUE WHERE id = $1", id)
-	return &a, err
+func (p *%NOMBREMANTENEDOR%MssqlRepository) BuscarPorId(ctx *ns.Context, id int64) (modelo *model.%NOMBREMANTENEDOR%Model, err error) {
+	var m []model.%NOMBREMANTENEDOR%Model
+
+	err = p.db.RunUnmarshal(ctx, &m, `EXEC NS_%NOMBREMANTENEDOR%_F @id = $1`, id)
+	if err != nil{
+		return
+	}
+	modelo = &m[0]
+
+	return
 }
 
-func (e *empaqueMssqlRepository) Buscar(ctx *ns.Context, search, advancedSearch string, isColumns bool) (modelo []model.EmpaqueModel, err error) {
+func (p *%NOMBREMANTENEDOR%MssqlRepository) Buscar(ctx *ns.Context, search, advancedSearch string, isColumns bool) (modelo []model.%NOMBREMANTENEDOR%Model, err error) {
 
 	if isColumns {
-		var m model.EmpaqueModel
-		cols := utils.ObtenerCampos(m.EmpaqueEnity)
-		modelo = append(modelo, model.EmpaqueModel{
+		var m model.%NOMBREMANTENEDOR%Model
+		cols := utils.ObtenerCampos(m.%NOMBREMANTENEDOR%Entity)
+		modelo = append(modelo, model.%NOMBREMANTENEDOR%Model{
 			Cols: cols,
 		})
 		return
 	}
 
-	columns := `id,
-				codigo,
-				nombre,
-				nombre_corto,
-				id_tipo,
-				impresion_auto,
-				tara_empaque,
-				capa_empaque,
-				capa_expo,
-				uso_avicola,
-				total_unid,
-				es_particionable,
-				peso_minimo,
-				peso_maximo,
-				habilitado,
-				fechacreacion,
-				transaction_uid,
-				id_cliente`
-	err = e.db.Select(ctx, &modelo, `
+	err = p.db.Select(ctx, &modelo, `
 		EXEC NS_GETDATA_F
 			@idempresa = '',
-			@columns = $1,
-			@table = 'TMEMPAQUE',
-			@search = $2,
-			@limit = $3,
+			@columns = '%VARIABLESCOLUMNAS%',
+			@table = '%NOMBRETABLA%',
+			@search = $1,
+			@limit = $2,
  			@id_filter = '',
-			@default_filter = 'codigo,nombre',
-			@advanced_filter = $4`, columns, search, 10, advancedSearch)
+			@default_filter = '%FILTROAVANZADO%',
+			@advanced_filter = $3`, search, 10, advancedSearch)
 
 	if err != nil {
 		return
@@ -174,27 +101,12 @@ func (e *empaqueMssqlRepository) Buscar(ctx *ns.Context, search, advancedSearch 
 	return
 }
 
-func (e *empaqueMssqlRepository) HabilitarDeshabilitar(ctx *ns.Context, id int64, status bool) (err error) {
-	pst, err := e.db.Prepare(ctx, `
-		UPDATE TMEMPAQUE
-		SET habilitado = $1
-		WHERE id = $2
-	`)
+func (p *%NOMBREMANTENEDOR%MssqlRepository) HabilitarDeshabilitar(ctx *ns.Context, id int64, status bool) (err error) {
+	_, err = p.db.Exec(ctx, `EXEC NSP_T%NOMBREMANTENEDOR%_A @id = $1, @estado = $2`, id, status)
 
-	if err != nil {
-		return
-	}
-
-	defer pst.Close()
-
-	_, err = pst.Exec(status, id)
-
-	if err != nil {
-		return
-	}
 	return
 }
 
-func NewEmpaqueRepository(db db.Sql) repository.EmpaqueRepository {
-	return &empaqueMssqlRepository{db: db}
+func New%NOMBREMANTENEDOR%Repository(db db.Sql) repository.%NOMBREMANTENEDOR%Repository {
+	return &%NOMBREMANTENEDOR%MssqlRepository{db: db}
 }

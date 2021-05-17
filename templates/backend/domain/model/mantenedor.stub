@@ -2,10 +2,10 @@ package model
 
 import (
 	"%RUTAMANTENEDOR%/domain/entity"
-	"ns-compartido-service/api/utils"
+	"%NOMBRERUTASERVICIO%/api/utils"
 )
 
 type %NOMBREMANTENEDOR%Model struct {
-	entity.%NOMBREMANTENEDOR%Enity `db:",squash"`
+	entity.%NOMBREMANTENEDOR%Entity `db:",squash"`
 	Cols                  []utils.SuggestColumns        `db:"cols"`
 }

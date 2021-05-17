@@ -1,12 +1,10 @@
 package utils
 
 import (
-	"fmt"
 	"github.com/example/nisira/services/json"
 	"io"
 	"io/ioutil"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -148,28 +146,44 @@ func ConvertirNombreARuta(namePath string) string {
 func ConvertNameTitle(attrTitle string) string {
 	return strings.Join(strings.Split(strings.Title(attrTitle), " "), "")
 }
+
+//
+func ConvertTableTitle(json json.Json) string {
+	TablaTitulo := ""
+	if TrimQuotes(json.Tipo) == "movimientos" {
+		TablaTitulo = "TR" + strings.Join(strings.Split(strings.ToUpper(TrimQuotes(json.NomMantenedor)), " "), "_")
+	} else if TrimQuotes(json.Tipo) == "mantenedores" {
+		TablaTitulo = "TM" + strings.Join(strings.Split(strings.ToUpper(TrimQuotes(json.NomMantenedor)), " "), "_")
+	}
+	return TablaTitulo
+}
+
+// Convertir los atributos del Json
+func ConvertAtributoTitle(attrTitle string) string {
+	return strings.Join(ConvertStringToTitle(strings.Split(strings.ToLower(attrTitle), "_")), "")
+}
+
 func ConvertNameAttr(attrTitle string) string {
 	return strings.Join(strings.Split(strings.ToLower(attrTitle), " "), "_")
 }
-func ListarVarTipos() map[int]string {
+
+/*func ListarVarTipos() map[int]string {
 	MapVar := make(map[int]string)
 	MapVar[0] = "int64"
 	MapVar[1] = "float64"
 	MapVar[2] = "bool"
 	MapVar[3] = "string"
 	return MapVar
-}
+}*/
 func JsonAAtributos(Json json.Json) string {
 	msg := ""
 	for _, value := range Json.Atributos {
-		if TrimQuotes(strconv.Quote(value.Nombre)) == "fecha_guardado" || TrimQuotes(strconv.Quote(value.Nombre)) == "transaction_uid" {
-			fmt.Println(TrimQuotes(strconv.Quote(value.Nombre)))
-		} else if TrimQuotes(strconv.Quote(value.Tipo)) == "datetime" {
-			msg += TrimQuotes(strconv.Quote(value.Nombre)) + "\t string \t`json:\"" + TrimQuotes(ConvertNameAttr(strconv.Quote(value.Nombre))) + "\"`\n\t"
+		if TrimQuotes(value.Nombre) == "fecha_guardado" || TrimQuotes(value.Nombre) == "transaction_uid" {
+		} else if TrimQuotes(value.Tipo) == "datetime" {
+			msg += TrimQuotes(ConvertAtributoTitle(value.Nombre)) + "\t string \t`json:\"" + TrimQuotes(ConvertNameAttr(value.Nombre)) + "\"`\n\t"
 		} else {
-			msg += TrimQuotes(strconv.Quote(value.Nombre)) + "\t" + TrimQuotes(strconv.Quote(value.Tipo)) + "\t`json:\"" + TrimQuotes(ConvertNameAttr(strconv.Quote(value.Nombre))) + "\"`\n\t"
+			msg += TrimQuotes(ConvertAtributoTitle(value.Nombre)) + "\t" + TrimQuotes(value.Tipo) + "\t`json:\"" + TrimQuotes(ConvertNameAttr(value.Nombre)) + "\"`\n\t"
 		}
-
 	}
 	return msg
 }
@@ -178,12 +192,12 @@ func JsonAAtributos(Json json.Json) string {
 func JsonAEntidad(Json json.Json) string {
 	msg := ""
 	for _, value := range Json.Atributos {
-		if TrimQuotes(strconv.Quote(value.Nombre)) == "transaction_uid" {
-			msg += TrimQuotes(strconv.Quote(value.Nombre)) + "\t mssql.UniqueIdentifier \t`db:\"" + TrimQuotes(ConvertNameAttr(strconv.Quote(value.Nombre))) + "\"`\n\t"
-		} else if TrimQuotes(strconv.Quote(value.Tipo)) == "datetime" {
-			msg += TrimQuotes(strconv.Quote(value.Nombre)) + "\t time.Time \t`db:\"" + TrimQuotes(ConvertNameAttr(strconv.Quote(value.Nombre))) + "\"`\n\t"
+		if TrimQuotes(value.Nombre) == "transaction_uid" {
+			msg += TrimQuotes(ConvertAtributoTitle(value.Nombre)) + "\t mssql.UniqueIdentifier \t`db:\"" + TrimQuotes(ConvertNameAttr(value.Nombre)) + "\"`\n\t"
+		} else if TrimQuotes(value.Tipo) == "datetime" {
+			msg += TrimQuotes(ConvertAtributoTitle(value.Nombre)) + "\t time.Time \t`db:\"" + TrimQuotes(ConvertNameAttr(value.Nombre)) + "\"`\n\t"
 		} else {
-			msg += TrimQuotes(strconv.Quote(value.Nombre)) + "\t" + TrimQuotes(strconv.Quote(value.Tipo)) + "\t`db:\"" + TrimQuotes(ConvertNameAttr(strconv.Quote(value.Nombre))) + "\"`\n\t"
+			msg += TrimQuotes(ConvertAtributoTitle(value.Nombre)) + "\t" + TrimQuotes(value.Tipo) + "\t`db:\"" + TrimQuotes(ConvertNameAttr(value.Nombre)) + "\"`\n\t"
 		}
 
 	}
@@ -194,13 +208,59 @@ func JsonAEntidad(Json json.Json) string {
 func ModeloAVO(Json json.Json) string {
 	msg := ""
 	for _, value := range Json.Atributos {
-		if TrimQuotes(strconv.Quote(value.Nombre)) == "transaction_uid" || TrimQuotes(strconv.Quote(value.Nombre)) == "fecha_guardado" {
+		if TrimQuotes(value.Nombre) == "transaction_uid" || TrimQuotes(value.Nombre) == "fecha_guardado" {
 		} else {
 
-			msg += "Id:               \tModelo." + TrimQuotes(strconv.Quote(value.Nombre))
+			msg += TrimQuotes(ConvertAtributoTitle(value.Nombre)) + ":               \tModelo." + TrimQuotes(ConvertAtributoTitle(value.Nombre)) + ",\n\t"
 		}
 	}
 	return msg
+}
+
+// Convertir Modelo a DTO
+func DTOAModelo(Json json.Json) string {
+	msg := ""
+	for _, value := range Json.Atributos {
+		if TrimQuotes(value.Nombre) == "transaction_uid" || TrimQuotes(value.Nombre) == "fecha_guardado" {
+		} else {
+
+			msg += TrimQuotes(ConvertAtributoTitle(value.Nombre)) + ":               \tRequest." + TrimQuotes(ConvertAtributoTitle(value.Nombre)) + ",\n\t"
+		}
+	}
+	return msg
+}
+
+// Convertir DTO a Modelo
+func ModeloAPaginacion(Json json.Json) string {
+	msg := ""
+	for _, value := range Json.Atributos {
+		if TrimQuotes(value.Nombre) == "transaction_uid" || TrimQuotes(value.Nombre) == "fecha_guardado" {
+		} else {
+
+			msg += TrimQuotes(ConvertAtributoTitle(value.Nombre)) + ":               \tModelo[i]." + TrimQuotes(ConvertAtributoTitle(value.Nombre)) + ",\n\t"
+		}
+	}
+	return msg
+}
+
+// Convertir Modelo a DTO
+func JsonAColumnas(Json json.Json) string {
+	msg := ""
+	for _, value := range Json.Atributos {
+		msg += TrimQuotes(ConvertNameAttr(value.Nombre)) + ","
+	}
+	return msg[:len(msg)-1]
+}
+
+func FiltroAvanzado(Json json.Json) string {
+	msg := ""
+	for _, value := range Json.Atributos {
+		if TrimQuotes(value.Nombre) == "codigo" || TrimQuotes(value.Nombre) == "nombre" {
+			msg += TrimQuotes(ConvertNameAttr(value.Nombre)) + ","
+		}
+	}
+
+	return msg[:len(msg)-1]
 }
 
 //Crear un Mapa a partir de un arreglo JSON
@@ -212,8 +272,7 @@ func ModeloAVO(Json json.Json) string {
 	fmt.Println(MapVar[0][1])
 }*/
 
-// Funcion para quitar comillas a un string
-
+// Funcion para eliminar comillas a un string
 func TrimQuotes(s string) string {
 	if len(s) >= 2 {
 		if c := s[len(s)-1]; s[0] == c && (c == '"' || c == '\'') {
@@ -221,4 +280,12 @@ func TrimQuotes(s string) string {
 		}
 	}
 	return s
+}
+
+// Convertir un arreglo de strings a otro con la primera letra en mayuscula
+func ConvertStringToTitle(arr []string) []string {
+	for indice, valor := range arr {
+		arr[indice] = strings.Title(valor)
+	}
+	return arr
 }

@@ -2,19 +2,19 @@ package routes
 
 import (
 	"gitlab.com/ns-desarrollo-web/erp/ns-core-service"
-	"ns-compartido-service/api/mantenedores/empaque/domain/usecase"
-	"ns-compartido-service/api/mantenedores/empaque/infrastructure/delivery/http/controller"
+	"%RUTAMANTENEDOR%/domain/usecase"
+	"%RUTAMANTENEDOR%/infrastructure/delivery/http/controller"
 )
 
-func NewEmpaqueRoutes(router *ns.Router, useCase usecase.EmpaqueUseCase) {
-	c := controller.NewempaqueController(useCase)
+func New%NOMBREMANTENEDOR%Routes(router *ns.Router, useCase usecase.%NOMBREMANTENEDOR%UseCase) {
+	c := controller.New%NOMBREMANTENEDOR%Controller(useCase)
 
-	router.GET("/empaque", c.Listar)
-	router.GET("/empaque-buscar", c.Buscar)
-	router.GET("/empaque/:id", c.BuscarPorId)
-	router.POST("/empaque", c.Crear)
-	router.PUT("/empaque/:id", c.Actualizar)
-	router.DELETE("/empaque/:id", c.Eliminar)
-	router.PATCH("/empaque/:id/habilitar", c.Habilitar)
-	router.PATCH("/empaque/:id/deshabilitar", c.Deshabilitar)
+	router.GET("/%NOMBRERUTA%", c.Listar)
+	router.GET("/%NOMBRERUTA%-buscar", c.Buscar)
+	router.GET("/%NOMBRERUTA%/:id", c.BuscarPorId)
+	router.POST("/%NOMBRERUTA%", c.Crear)
+	router.PUT("/%NOMBRERUTA%/:id", c.Actualizar)
+	router.DELETE("/%NOMBRERUTA%/:id", c.Eliminar)
+	router.PATCH("/%NOMBRERUTA%/:id/habilitar", c.Habilitar)
+	router.PATCH("/%NOMBRERUTA%/:id/deshabilitar", c.Deshabilitar)
 }
