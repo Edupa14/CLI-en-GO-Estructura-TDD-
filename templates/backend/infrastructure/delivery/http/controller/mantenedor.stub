@@ -1,0 +1,166 @@
+package controller
+
+import (
+	"gitlab.com/ns-desarrollo-web/erp/ns-core-service"
+	"ns-compartido-service/api/mantenedores/empaque/domain/dto"
+	"ns-compartido-service/api/mantenedores/empaque/domain/usecase"
+	"ns-compartido-service/api/utils"
+	"strconv"
+)
+
+type empaqueController struct {
+	useCase usecase.EmpaqueUseCase
+}
+
+func (p *empaqueController) Listar(client *ns.Client) {
+	pag := client.GetPagination()
+
+	rs, err := p.useCase.Listar(client.GetContext(), pag.Start, pag.Length, pag.Search, pag.Order)
+	if err != nil {
+		client.Fail(err)
+		return
+	}
+
+	client.Ok(rs)
+}
+
+func (p *empaqueController) Buscar(client *ns.Client) {
+	search := client.Query("search")
+	var advancedSearch string
+
+	advanced, err := utils.ParseBoolean(client.Query("advanced"))
+	if err != nil {
+		client.Fail(err)
+		return
+	}
+
+	columns, err := utils.ParseBoolean(client.Query("c"))
+	if err != nil {
+		client.Fail(err)
+		return
+	}
+
+	if advanced && !columns { // is Advanced
+		advancedSearch, err = utils.StringKey(search)
+		if err != nil {
+			client.Fail(err)
+			return
+		}
+	}
+
+	rs, err := p.useCase.Buscar(client.GetContext(), search, advancedSearch, columns)
+	if err != nil {
+		client.Fail(err)
+		return
+	}
+
+	client.Ok(rs)
+}
+
+func (p *empaqueController) BuscarPorId(client *ns.Client) {
+	id, err := strconv.ParseInt(client.Param("id"), 10, 64)
+	if err != nil {
+		client.Fail(err)
+		return
+	}
+
+	rs, err := p.useCase.BuscarPorId(client.GetContext(), id)
+	if err != nil {
+		client.Fail(err)
+		return
+	}
+
+	client.Ok(rs)
+}
+
+func (p *empaqueController) Crear(client *ns.Client) {
+	var req dto.EmpaqueRequest
+	err := client.UnmarshalDTO(&req)
+	if err != nil {
+		client.Fail(err)
+		return
+	}
+
+	rs, err := p.useCase.Crear(client.GetContext(), &req)
+	if err != nil {
+		client.Fail(err)
+		return
+	}
+
+	client.Ok(rs)
+}
+
+func (p *empaqueController) Actualizar(client *ns.Client) {
+	var req dto.EmpaqueRequest
+	err := client.UnmarshalDTO(&req)
+	if err != nil {
+		client.Fail(err)
+		return
+	}
+
+	id, err := strconv.ParseInt(client.Param("id"), 10, 64)
+	if err != nil {
+		client.Fail(err)
+		return
+	}
+
+	rs, err := p.useCase.Actualizar(client.GetContext(), id, &req)
+	if err != nil {
+		client.Fail(err)
+		return
+	}
+
+	client.Ok(rs)
+}
+
+func (p *empaqueController) Eliminar(client *ns.Client) {
+	id, err := strconv.ParseInt(client.Param("id"), 10, 64)
+	if err != nil {
+		client.Fail(err)
+		return
+	}
+
+	err = p.useCase.Eliminar(client.GetContext(), id)
+	if err != nil {
+		client.Fail(err)
+		return
+	}
+
+	client.Ok()
+}
+
+func (p *empaqueController) Habilitar(client *ns.Client) {
+	id, err := strconv.ParseInt(client.Param("id"), 10, 64)
+	if err != nil {
+		client.Fail(err)
+		return
+	}
+
+	err = p.useCase.Habilitar(client.GetContext(), id)
+	if err != nil {
+		client.Fail(err)
+		return
+	}
+
+	client.Ok()
+}
+
+func (p *empaqueController) Deshabilitar(client *ns.Client) {
+	id, err := strconv.ParseInt(client.Param("id"), 10, 64)
+	if err != nil {
+		client.Fail(err)
+		return
+	}
+
+	err = p.useCase.Deshabilitar(client.GetContext(), id)
+	if err != nil {
+		client.Fail(err)
+		return
+	}
+
+	client.Ok()
+}
+
+func NewempaqueController(useCase usecase.EmpaqueUseCase) *empaqueController {
+	return &empaqueController{useCase: useCase}
+}

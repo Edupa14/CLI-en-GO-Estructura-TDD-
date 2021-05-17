@@ -1,0 +1,10 @@
+package entity
+
+import (
+	mssql "github.com/denisenkom/go-mssqldb"
+	"time"
+)
+
+type %NOMBREMANTENEDOR%Enity struct {
+	%VARIABLESENTIDAD%
+}

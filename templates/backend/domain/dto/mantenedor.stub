@@ -1,0 +1,5 @@
+package dto
+
+type %NOMBREMANTENEDOR%Request struct {
+	%VARIABLESJSON%
+}

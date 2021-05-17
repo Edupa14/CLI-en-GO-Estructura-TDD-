@@ -1,0 +1,20 @@
+package routes
+
+import (
+	"gitlab.com/ns-desarrollo-web/erp/ns-core-service"
+	"ns-compartido-service/api/mantenedores/empaque/domain/usecase"
+	"ns-compartido-service/api/mantenedores/empaque/infrastructure/delivery/http/controller"
+)
+
+func NewEmpaqueRoutes(router *ns.Router, useCase usecase.EmpaqueUseCase) {
+	c := controller.NewempaqueController(useCase)
+
+	router.GET("/empaque", c.Listar)
+	router.GET("/empaque-buscar", c.Buscar)
+	router.GET("/empaque/:id", c.BuscarPorId)
+	router.POST("/empaque", c.Crear)
+	router.PUT("/empaque/:id", c.Actualizar)
+	router.DELETE("/empaque/:id", c.Eliminar)
+	router.PATCH("/empaque/:id/habilitar", c.Habilitar)
+	router.PATCH("/empaque/:id/deshabilitar", c.Deshabilitar)
+}

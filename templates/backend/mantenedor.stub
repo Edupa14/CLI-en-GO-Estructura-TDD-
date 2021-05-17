@@ -1,0 +1,24 @@
+package %NOMBREPAQUETEMANTENEDOR%
+
+import (
+	"gitlab.com/ns-desarrollo-web/erp/ns-core-service"
+	db "gitlab.com/ns-desarrollo-web/erp/ns-core-service/services/databases"
+	"%RUTAMANTENEDOR%/application/service"
+	"%RUTAMANTENEDOR%/application/usecase"
+	"%RUTAMANTENEDOR%/infrastructure/delivery/http/routes"
+	"%RUTAMANTENEDOR%/infrastructure/persistence/mssql_repository"
+)
+
+func Create(router *ns.Router, db db.Sql) {
+	// Repository implementation
+	%NOMBREMANTENEDOR%Repository := mssql_repository.New%NOMBREMANTENEDOR%Repository(db)
+
+	// Service Implementation
+	%NOMBREMANTENEDOR%Service := service.New%NOMBREMANTENEDOR%Service(%NOMBREMANTENEDOR%Repository)
+
+	// UseCase implementation
+	%NOMBREMANTENEDOR%UseCase := usecase.New%NOMBREMANTENEDOR%UseCase(%NOMBREMANTENEDOR%Repository, %NOMBREMANTENEDOR%Service)
+
+	// Http router controller register
+	routes.New%NOMBREMANTENEDOR%Routes(router, %NOMBREMANTENEDOR%UseCase)
+}

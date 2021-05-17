@@ -1,0 +1,18 @@
+package usecase
+
+import (
+	"gitlab.com/ns-desarrollo-web/erp/ns-core-service"
+	"%RUTAMANTENEDOR%/domain/dto"
+	"%RUTAMANTENEDOR%/domain/valueobject"
+)
+
+type %NOMBREMANTENEDOR%UseCase interface {
+	Listar(ctx *ns.Context, start int, length int, search string, order string) (res *valueobject.%NOMBREMANTENEDOR%Paginacion, err error)
+	Buscar(ctx *ns.Context, ssearch, advancedSearch string, columns bool) (res []*valueobject.%NOMBREMANTENEDOR%Suggest, err error)
+	BuscarPorId(ctx *ns.Context, id int64) (res * valueobject.%NOMBREMANTENEDOR%Response, err error)
+	Crear(ctx *ns.Context, request *dto.%NOMBREMANTENEDOR%Request) (res *valueobject.%NOMBREMANTENEDOR%Response, err error)
+	Actualizar(ctx *ns.Context, id int64, request *dto.%NOMBREMANTENEDOR%Request) (res *valueobject.%NOMBREMANTENEDOR%Response, err error)
+	Eliminar(ctx *ns.Context, id int64) (err error)
+	Habilitar(ctx *ns.Context, id int64) (err error)
+	Deshabilitar(ctx *ns.Context, id int64) (err error)
+}

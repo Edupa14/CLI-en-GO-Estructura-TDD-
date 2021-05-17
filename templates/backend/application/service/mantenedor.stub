@@ -1,0 +1,38 @@
+package service
+
+import (
+	"gitlab.com/ns-desarrollo-web/erp/ns-core-service"
+	"ns-compartido-service/api/mantenedores/empaque/domain/mapping"
+	"ns-compartido-service/api/mantenedores/empaque/domain/repository"
+	"ns-compartido-service/api/mantenedores/empaque/domain/valueobject"
+)
+
+type EmpaqueService struct {
+	repo repository.EmpaqueRepository
+}
+
+func (e *EmpaqueService) EmpaquePaginacion(ctx *ns.Context, start int, length int, search string, order string) (res *valueobject.EmpaquePaginacion, err error) {
+	rs, total, filtered, err := e.repo.Listar(ctx, start, length, search, order)
+	if err != nil {
+		return
+	}
+
+	res = mapping.MapEmpaquePaginación(rs, total, filtered)
+
+	return
+}
+
+func (e *EmpaqueService) EmpaqueSuggest(ctx *ns.Context, search, advancedSearch string, columns bool) (res []*valueobject.EmpaqueSuggest, err error) {
+	rs, err := e.repo.Buscar(ctx, search, advancedSearch, columns)
+	if err != nil {
+		return
+	}
+
+	res = mapping.MapEmpaqueSuggest(rs)
+
+	return
+}
+
+func NewEmpaqueService(empaqueRepository repository.EmpaqueRepository) *EmpaqueService{
+	return &EmpaqueService{repo: empaqueRepository}
+}

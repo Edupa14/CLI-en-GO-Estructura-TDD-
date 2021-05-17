@@ -1,0 +1,16 @@
+package repository
+
+import (
+	"gitlab.com/ns-desarrollo-web/erp/ns-core-service"
+	"%RUTAMANTENEDOR%/domain/model"
+)
+
+type %NOMBREMANTENEDOR%Repository interface {
+	Listar(ctx *ns.Context, start int, length int, search string, order string) (res []model.%NOMBREMANTENEDOR%Model, total int64, filtered int64, err error)
+	Buscar(ctx *ns.Context, search, advancedSearch string, columns bool) (res []model.%NOMBREMANTENEDOR%Model, err error)
+	BuscarPorId(ctx *ns.Context, id int64) (res *model.%NOMBREMANTENEDOR%Model, err error)
+	Crear(ctx *ns.Context, productoModel *model.%NOMBREMANTENEDOR%Model) (id int64, err error)
+	Actualizar(ctx *ns.Context, id int64, productoModel *model.%NOMBREMANTENEDOR%Model) (err error)
+	Eliminar(ctx *ns.Context, id int64) (err error)
+	HabilitarDeshabilitar(ctx *ns.Context, id int64, status bool) (err error)
+}

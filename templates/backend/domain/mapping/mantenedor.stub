@@ -1,0 +1,113 @@
+package mapping
+
+import (
+	"%RUTAMANTENEDOR%/domain/dto"
+	"%RUTAMANTENEDOR%/domain/entity"
+	"%RUTAMANTENEDOR%/domain/model"
+	"%RUTAMANTENEDOR%/domain/valueobject"
+)
+
+func MapEmpaquePaginación(mod []model.EmpaqueModel, total int64, filtered int64) *valueobject.EmpaquePaginacion {
+	var res []valueobject.EmpaqueResponse
+
+	for i := range mod {
+		res = append(res, valueobject.EmpaqueResponse{
+			Id:               	mod[i].Id,
+			Codigo:           	mod[i].Codigo,
+			Nombre:      		mod[i].Nombre,
+			NombreCorto:      	mod[i].NombreCorto,
+			IdTipo:         	mod[i].IdTipo,
+			ImpresionAuto:      mod[i].ImpresionAuto,
+			TaraEmpaque:        mod[i].TaraEmpaque,
+			CapaEmpaque:      	mod[i].CapaEmpaque,
+			CapaExpo:        	mod[i].CapaExpo,
+			IdCliente: 			mod[i].IdCliente,
+			UsoAvicola:         mod[i].UsoAvicola,
+			TotalUnid:         	mod[i].TotalUnid,
+			EsParticionable:    mod[i].EsParticionable,
+			PesoMinimo:   		mod[i].PesoMinimo,
+			PesoMaximo:      	mod[i].PesoMaximo,
+			Habilitado:       	mod[i].Habilitado,
+			TransactionUID:   	mod[i].TransactionUID.String(),
+		})
+	}
+
+	return &valueobject.EmpaquePaginacion{
+		Data: res,
+		Meta: valueobject.MetaPaginacion{
+			RecordsFiltered: filtered,
+			RecordsTotal:    total,
+		},
+	}
+}
+
+func MapEmpaqueSuggest(mod []model.EmpaqueModel) (res []*valueobject.EmpaqueSuggest) {
+	for i := range mod {
+
+		var allData interface{}
+
+		allData = mod
+
+		if mod[i].Cols != nil {
+			allData = mod[i].Cols
+		}
+
+		res = append(res, &valueobject.EmpaqueSuggest{
+			Id:          mod[i].Id,
+			Code:        &mod[i].Codigo,
+			Label:       &mod[i].Nombre,
+			Description: &mod[i].Codigo,
+			Badge:       &mod[i].Codigo,
+			Data:        allData,
+		})
+	}
+
+	return
+}
+
+func Map%NOMBREMANTENEDOR%ModelToVO(Modelo *model.%NOMBREMANTENEDOR%Model) *valueobject.%NOMBREMANTENEDOR%Response {
+
+
+	return &valueobject.%NOMBREMANTENEDOR%Response{
+		Id:               	EmpaqueModel.Id,
+		Codigo:           	EmpaqueModel.Codigo,
+		Nombre:      		EmpaqueModel.Nombre,
+		NombreCorto:      	EmpaqueModel.NombreCorto,
+		IdTipo:         	EmpaqueModel.IdTipo,
+		ImpresionAuto:      EmpaqueModel.ImpresionAuto,
+		TaraEmpaque:        EmpaqueModel.TaraEmpaque,
+		CapaEmpaque:      	EmpaqueModel.CapaEmpaque,
+		CapaExpo:        	EmpaqueModel.CapaExpo,
+		IdCliente: 			EmpaqueModel.IdCliente,
+		UsoAvicola:         EmpaqueModel.UsoAvicola,
+		TotalUnid:         	EmpaqueModel.TotalUnid,
+		EsParticionable:    EmpaqueModel.EsParticionable,
+		PesoMinimo:   		EmpaqueModel.PesoMinimo,
+		PesoMaximo:      	EmpaqueModel.PesoMaximo,
+		Habilitado:       	EmpaqueModel.Habilitado,
+		TransactionUID:   	EmpaqueModel.TransactionUID.String(),
+	}
+}
+
+func MapEmpaqueDTOTOModel(request *dto.EmpaqueRequest) *model.EmpaqueModel {
+	return &model.EmpaqueModel{
+		EmpaqueEnity: entity.EmpaqueEnity{
+			Id:               	request.Id,
+			Codigo:           	request.Codigo,
+			Nombre:      		request.Nombre,
+			NombreCorto:      	request.NombreCorto,
+			IdTipo:         	request.IdTipo,
+			ImpresionAuto:      request.ImpresionAuto,
+			TaraEmpaque:        request.TaraEmpaque,
+			CapaEmpaque:      	request.CapaEmpaque,
+			CapaExpo:        	request.CapaExpo,
+			IdCliente: 			request.IdCliente,
+			UsoAvicola:         request.UsoAvicola,
+			TotalUnid:         	request.TotalUnid,
+			EsParticionable:    request.EsParticionable,
+			PesoMinimo:   		request.PesoMinimo,
+			PesoMaximo:      	request.PesoMaximo,
+			Habilitado:       	request.Habilitado,
+		},
+	}
+}
