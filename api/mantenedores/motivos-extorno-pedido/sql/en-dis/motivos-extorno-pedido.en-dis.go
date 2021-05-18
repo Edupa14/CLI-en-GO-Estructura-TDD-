@@ -1,0 +1,28 @@
+ALTER   PROCEDURE [dbo].[NS_TMMOTIVOS_EXTORNO_PEDIDO_ED](
+	@id int,
+	@estado bit
+)
+AS
+DECLARE @ErrorMessage NVARCHAR(max),
+		@ErrorSeverity INT,
+		@ErrorState INT;
+
+BEGIN TRANSACTION
+	BEGIN TRY;
+	IF NOT EXISTS (SELECT id FROM TMMOTIVOS_EXTORNO_PEDIDO WITH(NOLOCK) WHERE id = @id)
+		THROW 51008, 'No existe este registro', 15;
+
+	UPDATE TMMOTIVOS_EXTORNO_PEDIDO SET habilitado = @estado
+	WHERE id = @id;
+
+
+	COMMIT TRANSACTION;
+	END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION;
+	SELECT
+		@ErrorMessage='Ocurrio un Error: '+ERROR_MESSAGE() + ' LN. ' + CONVERT(NVARCHAR(255), ERROR_LINE() ) + '.',
+		@ErrorSeverity=ERROR_SEVERITY(),
+		@ErrorState=ERROR_STATE();
+	THROW 51003, @ErrorMessage, 10
+END CATCH
