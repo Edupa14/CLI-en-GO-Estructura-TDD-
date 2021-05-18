@@ -64,7 +64,7 @@ func (p *%NOMBREMANTENEDOR%MssqlRepository) Eliminar(ctx *ns.Context, id int64) 
 func (p *%NOMBREMANTENEDOR%MssqlRepository) BuscarPorId(ctx *ns.Context, id int64) (modelo *model.%NOMBREMANTENEDOR%Model, err error) {
 	var m []model.%NOMBREMANTENEDOR%Model
 
-	err = p.db.RunUnmarshal(ctx, &m, `EXEC NS_%NOMBREMANTENEDOR%_F @id = $1`, id)
+	err = p.db.RunUnmarshal(ctx, &m, `EXEC NS_%NOMBRETABLA%_F @id = $1`, id)
 	if err != nil{
 		return
 	}
@@ -102,7 +102,7 @@ func (p *%NOMBREMANTENEDOR%MssqlRepository) Buscar(ctx *ns.Context, search, adva
 }
 
 func (p *%NOMBREMANTENEDOR%MssqlRepository) HabilitarDeshabilitar(ctx *ns.Context, id int64, status bool) (err error) {
-	_, err = p.db.Exec(ctx, `EXEC NSP_T%NOMBREMANTENEDOR%_A @id = $1, @estado = $2`, id, status)
+	_, err = p.db.Exec(ctx, `EXEC NSP_T%NOMBRETABLA%_A @id = $1, @estado = $2`, id, status)
 
 	return
 }

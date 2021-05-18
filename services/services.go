@@ -30,6 +30,7 @@ func (s *Service) CreateMapDefault(fileName string, json json.Json) map[string]s
 	MapForReplace["%FILTROAVANZADO%"] = utils.FiltroAvanzado(json)
 	MapForReplace["%NOMBREMANTENEDORSP%"] = utils.ConvertTitleMayus(fileName)
 	MapForReplace["%VARIABLESDBCOLUMNASSP%"] = utils.JsonADbColumnasSp(json)
+	MapForReplace["%VARIABLESDBCOLUMNASSPTARGET%"] = utils.JsonADbColumnasTarget(json)
 	return MapForReplace
 }
 
@@ -50,8 +51,10 @@ func (s *Service) ObtenerRutasPlantillas() map[string]string {
 	MapPlatilla["mnt"] = ""
 	//--------------BASE DE DATOS--------------
 	MapPlatilla["insert"] = "sql/insert"
+	MapPlatilla["finder"] = "sql/finder"
+	MapPlatilla["update"] = "sql/update"
 	//-------------EXTRAS--------------
-	MapPlatilla["extras"] = "sql/extras"
+	MapPlatilla["extras"] = "extras/extras"
 
 	return MapPlatilla
 }

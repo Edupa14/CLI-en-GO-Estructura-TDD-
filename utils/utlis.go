@@ -158,10 +158,12 @@ func ConvertTableTitle(json json.Json) string {
 	}
 	return TablaTitulo
 }
+
 //
 func ConvertTitleMayus(attrTitle string) string {
 	return strings.Join(strings.Split(strings.ToUpper(attrTitle), " "), "")
 }
+
 // Convertir los atributos del Json
 func ConvertAtributoTitle(attrTitle string) string {
 	return strings.Join(ConvertStringToTitle(strings.Split(strings.ToLower(attrTitle), "_")), "")
@@ -255,6 +257,7 @@ func JsonAColumnas(Json json.Json) string {
 	}
 	return msg[:len(msg)-1]
 }
+
 // Convertir Json a dbColumnas
 func JsonADbColumnas(Json json.Json) string {
 	msg := ""
@@ -266,19 +269,32 @@ func JsonADbColumnas(Json json.Json) string {
 	}
 	return msg[:len(msg)-1]
 }
+
 // Convertir Json a dbColumnasSP
 func JsonADbColumnasSp(Json json.Json) string {
 	msg := ""
 	for _, value := range Json.Atributos {
 		if TrimQuotes(value.Nombre) == "id" || TrimQuotes(value.Nombre) == "fecha_guardado" || TrimQuotes(value.Nombre) == "transaction_uid" {
-		} else if (TrimQuotes(value.Tipo) == "string"){
+		} else if TrimQuotes(value.Tipo) == "string" {
 			msg += TrimQuotes(ConvertNameAttr(value.Nombre)) + " VARCHAR(" + strconv.Itoa(value.CantCaracteres) + ")" + ","
-		}else if (TrimQuotes(value.Tipo) == "bool"){
+		} else if TrimQuotes(value.Tipo) == "bool" {
 			msg += TrimQuotes(ConvertNameAttr(value.Nombre)) + " BIT" + ","
-		}else if (TrimQuotes(value.Tipo) == "int64"){
+		} else if TrimQuotes(value.Tipo) == "int64" {
 			msg += TrimQuotes(ConvertNameAttr(value.Nombre)) + " INT" + ","
-		}else if (TrimQuotes(value.Tipo) == "float64"){
+		} else if TrimQuotes(value.Tipo) == "float64" {
 			msg += TrimQuotes(ConvertNameAttr(value.Nombre)) + " NUMERIC(17,2)" + ","
+		}
+	}
+	return msg[:len(msg)-1]
+}
+
+// Convertir Json a dbColumnasTarget
+func JsonADbColumnasTarget(Json json.Json) string {
+	msg := ""
+	for _, value := range Json.Atributos {
+		if TrimQuotes(value.Nombre) == "id" || TrimQuotes(value.Nombre) == "fecha_guardado" || TrimQuotes(value.Nombre) == "transaction_uid" {
+		} else {
+			msg += "[target]." + TrimQuotes(ConvertNameAttr(value.Nombre)) + "= [source]." + TrimQuotes(ConvertNameAttr(value.Nombre)) + ","
 		}
 	}
 	return msg[:len(msg)-1]
