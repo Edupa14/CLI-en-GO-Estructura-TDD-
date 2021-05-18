@@ -269,12 +269,22 @@ func JsonADbColumnas(Json json.Json) string {
 	}
 	return msg[:len(msg)-1]
 }
-
+// Convertir Json a dbColumnasHeader
+func JsonADbColumnasHeader(Json json.Json) string {
+	msg := ""
+	for _, value := range Json.Atributos {
+		if TrimQuotes(value.Nombre) == "id" || TrimQuotes(value.Nombre) == "habilitado" || TrimQuotes(value.Nombre) == "fecha_guardado" || TrimQuotes(value.Nombre) == "transaction_uid" {
+		} else {
+			msg += TrimQuotes(ConvertNameAttr(value.Nombre)) + ","
+		}
+	}
+	return msg[:len(msg)-1]
+}
 // Convertir Json a dbColumnasSP
 func JsonADbColumnasSp(Json json.Json) string {
 	msg := ""
 	for _, value := range Json.Atributos {
-		if TrimQuotes(value.Nombre) == "id" || TrimQuotes(value.Nombre) == "fecha_guardado" || TrimQuotes(value.Nombre) == "transaction_uid" {
+		if TrimQuotes(value.Nombre) == "id" || TrimQuotes(value.Nombre) == "habilitado"|| TrimQuotes(value.Nombre) == "fecha_guardado" || TrimQuotes(value.Nombre) == "transaction_uid" {
 		} else if TrimQuotes(value.Tipo) == "string" {
 			msg += TrimQuotes(ConvertNameAttr(value.Nombre)) + " VARCHAR(" + strconv.Itoa(value.CantCaracteres) + ")" + ","
 		} else if TrimQuotes(value.Tipo) == "bool" {
@@ -292,7 +302,7 @@ func JsonADbColumnasSp(Json json.Json) string {
 func JsonADbColumnasTarget(Json json.Json) string {
 	msg := ""
 	for _, value := range Json.Atributos {
-		if TrimQuotes(value.Nombre) == "id" || TrimQuotes(value.Nombre) == "fecha_guardado" || TrimQuotes(value.Nombre) == "transaction_uid" {
+		if TrimQuotes(value.Nombre) == "id" || TrimQuotes(value.Nombre) == "habilitado" || TrimQuotes(value.Nombre) == "fecha_guardado" || TrimQuotes(value.Nombre) == "transaction_uid" {
 		} else {
 			msg += "[target]." + TrimQuotes(ConvertNameAttr(value.Nombre)) + "= [source]." + TrimQuotes(ConvertNameAttr(value.Nombre)) + ","
 		}

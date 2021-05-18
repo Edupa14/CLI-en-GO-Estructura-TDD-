@@ -102,7 +102,7 @@ func (p *%NOMBREMANTENEDOR%MssqlRepository) Buscar(ctx *ns.Context, search, adva
 }
 
 func (p *%NOMBREMANTENEDOR%MssqlRepository) HabilitarDeshabilitar(ctx *ns.Context, id int64, status bool) (err error) {
-	_, err = p.db.Exec(ctx, `EXEC NSP_T%NOMBRETABLA%_A @id = $1, @estado = $2`, id, status)
+	_, err = p.db.Exec(ctx, `EXEC NS_%NOMBRETABLA%_ED @id = $1, @estado = $2`, id, status)
 
 	return
 }

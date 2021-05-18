@@ -1,5 +1,5 @@
-CREATE   PROCEDURE [dbo].[NS_TMMOTIVOS_EXTORNO_PEDIDO_F](
-	@id int
+CREATE    PROCEDURE [dbo].[NS_%NOMBRETABLA%_D](
+	@id varchar(max)
 )
 AS
 	DECLARE @ErrorMessage NVARCHAR(max),
@@ -7,12 +7,11 @@ AS
 			@ErrorState INT;
 
 BEGIN TRY
-	IF NOT EXISTS (SELECT id FROM TMMOTIVOS_EXTORNO_PEDIDO WITH(NOLOCK) WHERE id = @id)
-			THROW 51003, 'No existe ninguna registro con este identificador', 15;
-	
-	SELECT *
-	FROM TMMOTIVOS_EXTORNO_PEDIDO t
-	WHERE t.id=@id
+	IF NOT EXISTS (SELECT id FROM %NOMBRETABLA% WITH(NOLOCK) WHERE id = @id)
+		THROW 51008, 'No existe este registro', 15;
+
+	DELETE FROM %NOMBRETABLA%
+	WHERE id = @id;
 
 END TRY
 BEGIN CATCH
