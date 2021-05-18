@@ -17,6 +17,7 @@ func (s *Service) CreateMapDefault(fileName string, json json.Json) map[string]s
 	MapForReplace["%NOMBREPAQUETEMANTENEDOR%"] = utils.ConvertNameAttr(fileName)
 	MapForReplace["%NOMBRERUTA%"] = utils.ConvertirNombreARuta(fileName)
 	MapForReplace["%NOMBRERUTASERVICIO%"] = "ns-" + utils.ConvertirNombreARuta(json.Servicio) + "-service"
+	MapForReplace["%NOMBRESERVICIO%"] = utils.ConvertirNombreARuta(json.Servicio) + "_service"
 	MapForReplace["%RUTAMANTENEDOR%"] = "ns-" + utils.ConvertirNombreARuta(json.Servicio) + "-service/api/" + utils.ConvertirNombreARuta(json.Tipo) + "/" + utils.ConvertirNombreARuta(fileName)
 	MapForReplace["%VARIABLESJSON%"] = utils.JsonAAtributos(json)
 	MapForReplace["%VARIABLESENTIDAD%"] = utils.JsonAEntidad(json)
@@ -25,7 +26,10 @@ func (s *Service) CreateMapDefault(fileName string, json json.Json) map[string]s
 	MapForReplace["%VARIABLESPAGINACION%"] = utils.ModeloAPaginacion(json)
 	MapForReplace["%NOMBRETABLA%"] = utils.ConvertTableTitle(json)
 	MapForReplace["%VARIABLESCOLUMNAS%"] = utils.JsonAColumnas(json)
+	MapForReplace["%VARIABLESDBCOLUMNAS%"] = utils.JsonADbColumnas(json)
 	MapForReplace["%FILTROAVANZADO%"] = utils.FiltroAvanzado(json)
+	MapForReplace["%NOMBREMANTENEDORSP%"] = utils.ConvertTitleMayus(fileName)
+	MapForReplace["%VARIABLESDBCOLUMNASSP%"] = utils.JsonADbColumnasSp(json)
 	return MapForReplace
 }
 
@@ -44,6 +48,10 @@ func (s *Service) ObtenerRutasPlantillas() map[string]string {
 	MapPlatilla["routes"] = "infrastructure/delivery/http/routes"
 	MapPlatilla["mssql"] = "infrastructure/persistence/mssql_repository"
 	MapPlatilla["mnt"] = ""
+	//--------------BASE DE DATOS--------------
+	MapPlatilla["insert"] = "sql/insert"
+	//-------------EXTRAS--------------
+	MapPlatilla["extras"] = "sql/extras"
 
 	return MapPlatilla
 }

@@ -1,0 +1,127 @@
+// app.go configuración extra
+"%RUTAMANTENEDOR%/"
+%NOMBREPAQUETEMANTENEDOR%.Create(router, db)
+
+// template kraken config
+{
+    "endpoint": "/erp/v1/%NOMBRERUTA%",
+    "method": "GET",
+    "output_encoding": "no-op",
+    "querystring_params": ["start", "length", "search", "order"],
+    "headers_to_pass": [
+        "Authorization"
+    ],
+    "backend": [{
+        "encoding": "no-op",
+        "url_pattern": "/%NOMBRERUTA%",
+        "host": [
+            "{{ .%NOMBRESERVICIO% }}"
+        ]
+    }]
+},
+{
+    "endpoint": "/erp/v1/%NOMBRERUTA%-buscar",
+    "method": "GET",
+    "output_encoding": "no-op",
+    "querystring_params": ["search","advanced","c"],
+    "headers_to_pass": [
+        "Authorization"
+    ],
+    "backend": [{
+        "encoding": "no-op",
+        "url_pattern": "/%NOMBRERUTA%-buscar",
+        "host": [
+            "{{ .%NOMBRESERVICIO% }}"
+        ]
+    }]
+},
+{
+    "endpoint": "/erp/v1/%NOMBRERUTA%/{id}",
+    "method": "GET",
+    "output_encoding": "no-op",
+    "headers_to_pass": [
+        "Authorization"
+    ],
+    "backend": [{
+        "encoding": "no-op",
+        "url_pattern": "/%NOMBRERUTA%/{id}",
+        "host": [
+            "{{ .%NOMBRESERVICIO% }}"
+        ]
+    }]
+},
+{
+    "endpoint": "/erp/v1/%NOMBRERUTA%",
+    "method": "POST",
+    "output_encoding": "no-op",
+    "headers_to_pass": [
+        "Authorization"
+    ],
+    "backend": [{
+        "encoding": "no-op",
+        "url_pattern": "/%NOMBRERUTA%",
+        "host": [
+            "{{ .%NOMBRESERVICIO% }}"
+        ]
+    }]
+},
+{
+    "endpoint": "/erp/v1/%NOMBRERUTA%/{id}",
+    "method": "PUT",
+    "output_encoding": "no-op",
+    "headers_to_pass": [
+        "Authorization"
+    ],
+    "backend": [{
+        "encoding": "no-op",
+        "url_pattern": "/%NOMBRERUTA%/{id}",
+        "host": [
+            "{{ .%NOMBRESERVICIO% }}"
+        ]
+    }]
+},
+{
+    "endpoint": "/erp/v1/%NOMBRERUTA%/{id}",
+    "method": "DELETE",
+    "output_encoding": "no-op",
+    "headers_to_pass": [
+        "Authorization"
+    ],
+    "backend": [{
+        "encoding": "no-op",
+        "url_pattern": "/%NOMBRERUTA%/{id}",
+        "host": [
+            "{{ .%NOMBRESERVICIO% }}"
+        ]
+    }]
+},
+{
+    "endpoint": "/erp/v1/%NOMBRERUTA%/{id}/habilitar",
+    "method": "PATCH",
+    "output_encoding": "no-op",
+    "headers_to_pass": [
+        "Authorization"
+    ],
+    "backend": [{
+        "encoding": "no-op",
+        "url_pattern": "/%NOMBRERUTA%/{id}/habilitar",
+        "host": [
+            "{{ .%NOMBRESERVICIO% }}"
+        ]
+    }]
+},
+{
+    "endpoint": "/erp/v1/%NOMBRERUTA%/{id}/deshabilitar",
+    "method": "PATCH",
+    "output_encoding": "no-op",
+    "headers_to_pass": [
+        "Authorization"
+    ],
+    "backend": [{
+        "encoding": "no-op",
+        "url_pattern": "/%NOMBRERUTA%/{id}/deshabilitar",
+        "host": [
+            "{{ .%NOMBRESERVICIO% }}"
+        ]
+    }]
+}
